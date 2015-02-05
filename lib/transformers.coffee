@@ -5,7 +5,7 @@ Util = {
 }
 
 ReactCompat = {
-  ConvertClassToClassName: (inArr) -> _.map inArr, (line) -> line.replace /class=/, 'className=', 'gi'
+  ConvertClassToClassName: (inArr) -> _.map inArr, (line) -> line.replace /class=/g, 'className=', 'gi'
 }
 
 module.exports = {

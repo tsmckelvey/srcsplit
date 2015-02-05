@@ -1,12 +1,19 @@
+#!/usr/bin/env coffee
 fs      = require 'fs'
 _       = require 'lodash'
 cson    = require 'cson'
 coffee  = require 'coffee-script'
 sandbox = require './lib/transformers'
+cli     = require 'commander'
 
-fileName = 'test.src'
+cli.version('0.0.1')
+   .usage('[options] <file>')
+   .option('-s, --stream <stream>', 'Stream to write')
+   .parse(process.argv)
 
-lines = fs.readFileSync(fileName).toString()
+inputFile = _.first cli.args
+
+lines = fs.readFileSync(inputFile).toString()
 
 # Normalize line-endings
 lines = lines.trim().replace /\r\n|\r/g, "\n"
@@ -24,8 +31,10 @@ config = {}
 
 if lines.substr(0, 3) is '/*-'
   cfgMatch = matchers.Cfg.exec lines
-  # TODO: If cfgMatch[1]
-  config = cson.parseSync cfgMatch[1], { sandbox }
+
+  if cfgMatch[1]
+    config = cson.parseSync cfgMatch[1], { sandbox }
+    lines = lines.substr lines.indexOf('-*/') + 3
 
 currentState = 'Command'
 currentCommand = 'All'
@@ -70,17 +79,19 @@ if config.All? and _.isArray(config.All)
     _.forOwn buffers, (n, key) ->
       buffers[key] = mutator buffers[key]
 
-# Apply named buffer transform
+# Apply named buffer transforms
 _.forOwn config, (n, key) ->
   if key isnt 'All'
     # TODO: Dedupe this w/ All
     _.forEach config[key], (mutator) ->
       buffers[key] = mutator buffers[key]
 
-# @TODO: Write to files
-
 # Join buffers into strings
 _.forOwn buffers, (n, key) -> buffers[key] = buffers[key].join "\n"
 
-# console.log buffers.Server
-# console.log buffers.Client
+# Print named stream
+if cli.stream? and buffers[cli.stream]?
+  console.log buffers[cli.stream]
+# Print All (useful for debugging)
+else
+  _.forOwn buffers, (b) -> console.log b
