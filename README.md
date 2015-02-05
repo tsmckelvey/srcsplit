@@ -59,14 +59,14 @@ define 'UI.Views.ProductList', [], ->
 [~Server] Loop over products.
     <isloop iterator="${pdict.SomeIterator}" var="i">
 [~Client]
-    (@state.products.map =>
+    {@state.products.map =>
 
 [All] Emit a .productTile.
       <div class="productTile">
       </div> <!-- end .productTile -->
 
 [~Client]
-    )
+    }
 [~Server]
     </isloop>
 
