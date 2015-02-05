@@ -19,7 +19,12 @@ In the repository root directory.
 $ srcsplit -s NamedStream <file>
 ```
 
-Then redirect output to your format of choice.
+Then redirect output to your file of choice:
+
+```
+$ srcsplit -s Server advanced-example.src > productlist.isml
+$ srcsplit -s Client advanced-example.src > UI.Views.ProductList.cjsx
+```
 
 ### Example (Simple)
 
