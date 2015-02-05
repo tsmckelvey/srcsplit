@@ -9,6 +9,7 @@ SourceSplit isn't yet on NPM.
 
 Instead, clone the repository and run:
 ```
+$ npm install
 $ npm link
 ```
 In the repository root directory.
