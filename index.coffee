@@ -1,4 +1,3 @@
-#!/usr/bin/env coffee
 fs      = require 'fs'
 _       = require 'lodash'
 cson    = require 'cson'
